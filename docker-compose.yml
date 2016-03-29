@@ -1,0 +1,30 @@
+postgres_redmine:
+  image: sameersbn/postgresql:9.4-15
+  container_name: postgres_redmine
+  environment:
+    - DB_NAME=db_name
+    - DB_USER=db_user
+    - DB_PASS=db_password
+  volumes:
+    - postgresql-data:/var/lib/postgresql
+  ports:
+    - "5432:5432"
+
+redmine:
+  image: sameersbn/redmine:3.2.1-1
+  container_name: redmine
+  environment:
+    - DB_ADAPTER=postgresql
+    - DB_HOST=192.168.99.100
+    - DB_PORT=5432
+    - DB_NAME=db_name
+    - DB_USER=db_user
+    - DB_PASS=db_password
+    - REDMINE_PORT=10083
+  volumes:
+    - redmine-data:/home/redmine/data
+  links:
+    - postgres_redmine:postgresql
+  ports:
+    - "10083:80"
+
